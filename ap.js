@@ -1,16 +1,14 @@
-
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var ObjectId = require('mongodb').ObjectID;
-var url = 'mongodb://localhost:27017/test';
+var url = 'mongodb://localhost:27017/Vipin';
 
-var insertDocument = function(abcd, callback) {
-   abcd.collection('mycollection').insertOne( {
+var insertDocument = function(db, callback) {
+   db.collection('mycollection').insertOne( {
       "address" : {
          "street" : "2 Avenue",
          "zipcode" : "10075",
          "building" : "1480",
-		 
          "coord" : [ -73.9557413, 40.7720266 ]
       },
       "borough" : "Manhattan",
@@ -30,20 +28,15 @@ var insertDocument = function(abcd, callback) {
       "name" : "Vella",
       "restaurant_id" : "41704620"
    }, function(err, result) {
-    //assert.equal(err, null);
-	if(err) {
-		console.log(err);
-	} else {
-		console.log("Inserted a document into the  collection." + err);    	
-	}
-	
+    assert.equal(err, null);
+    console.log("Inserted a document into the restaurants collection.");
     callback();
   });
 };
 
-MongoClient.connect(url, function(err, abcd) {
+MongoClient.connect(url, function(err, db) {
   assert.equal(null, err);
-  insertDocument(abcd, function() {
-      abcd.close();
+  insertDocument(db, function() {
+      db.close();
   });
 });
